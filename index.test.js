@@ -27,23 +27,8 @@ it("does something", async () => {
         light: var(--color-grey-dark),
         dark: var(--color-grey-light)
       )
-    );
-  `,
-    `
-    :root {
-      --color-background: var(--color-white);
-      --color-text-headline: var(--color-grey-dark);
-      --color-text-highlight: var(--color-grey-dark);
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --color-background: var(--color-black);
-        --color-text-headline: var(--color-grey-light);
-        --color-text-highlight: var(--color-grey-light);
-      }
-    }
-  `,
+    );`,
+    ":root {--color-background:var(--color-white);--color-text-headline:var(--color-grey-dark);--color-text-highlight:var(--color-grey-dark);}@media (prefers-color-scheme: dark) {:root {--color-background:var(--color-black);--color-text-headline:var(--color-grey-light);--color-text-highlight:var(--color-grey-light);}}",
     {}
   )
 })

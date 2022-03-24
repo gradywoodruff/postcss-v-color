@@ -13,7 +13,7 @@ module.exports = (opts = {}) => {
   const colors = new Map()
 
   return {
-    postcssPlugin: "postcss-darkmode",
+    postcssPlugin: "postcss-v-color",
     AtRule: {
       "v-color": (atRule, { result }) => {
         const params = parseAttrs(parseGroup(atRule.params)[0]).map(

@@ -1,4 +1,4 @@
-# postcss-darkmode
+# postcss-v-color
 
 [PostCSS] plugin for creating color variables.
 
@@ -39,7 +39,7 @@
 **Step 1:** Install plugin:
 
 ```sh
-npm install --save-dev postcss postcss-darkmode
+npm install --save-dev postcss postcss-v-color
 ```
 
 **Step 2:** Check you project for existed PostCSS config: `postcss.config.js`
@@ -54,7 +54,7 @@ and set this plugin in settings.
 ```diff
 module.exports = {
   plugins: [
-+   require('postcss-darkmode'),
++   require('postcss-v-color'),
     require('autoprefixer')
   ]
 }

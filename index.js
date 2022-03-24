@@ -1,4 +1,6 @@
 /**
+ * PostCSS Variable Colors
+ *
  * @type {import('postcss').PluginCreator}
  */
 

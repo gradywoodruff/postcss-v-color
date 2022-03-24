@@ -4,15 +4,33 @@
 
 [PostCSS]: https://github.com/postcss/postcss
 
-```css
-.foo {
-  /* Input example */
-}
+```
+@v-color (
+  bg-default ( 
+    light: var(--color-white),
+    dark: var(--color-black)
+  ),
+  fg-default ( 
+    light: var(--color-grey-dark),
+    dark: var(--color-grey-light)
+  ),
+  text-highlight ( 
+    light: var(--color-grey-dark),
+    dark: var(--color-grey-light)
+  )
+);
 ```
 
 ```css
-.foo {
-  /* Output example */
+:root {
+  --color-bg-default: var(--color-white);
+  --color-fg-default: var(--color-grey-dark);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg-default: var(--color-black);
+    --color-fg-default: var(--color-grey-light);
+  }
 }
 ```
 
@@ -41,5 +59,12 @@ module.exports = {
   ]
 }
 ```
+
+## Todo
+
+- [ ] Add manual mode toggle support
+- [ ] Add ability to add custom themes (like dark_dimmed)
+- [ ] Add ability to use args in postcss.config.js
+
 
 [official docs]: https://github.com/postcss/postcss#usage

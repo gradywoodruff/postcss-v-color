@@ -10,7 +10,7 @@ const parseAttrs = require("./lib/parsers/parse-attrs")
 module.exports = (opts = {}) => {
   // const dark = opts.darkSelector || `[data-color-mode="dark"]`
   // const light = `:not([data-color-mode="${
-  //   opts.darkSelector || "light"
+  //   opts.lightSelector || "light"
   // }"])`
   const colors = new Map()
 
@@ -18,26 +18,32 @@ module.exports = (opts = {}) => {
     postcssPlugin: "postcss-v-color",
     AtRule: {
       "v-color": (atRule, { result }) => {
-        const params = parseAttrs(parseGroup(atRule.params)[0]).map(
-          group =>
-            group.map((item, i) =>
-              i === 1
-                ? Object.fromEntries(
-                    new Set(
-                      item
-                        .trim()
-                        .split(/,/g)
-                        .map(line =>
-                          line.split(":").map(prop => prop.trim())
-                        )
-                    )
+        let params = parseGroup(atRule.params)[0]
+        if (!params) {
+          atRule.warn(result, "No color group found")
+          atRule.remove()
+          return
+        }
+        params = parseAttrs(params)
+        params = params.map(group =>
+          group.map((item, i) =>
+            i === 1
+              ? Object.fromEntries(
+                  new Set(
+                    item
+                      .trim()
+                      .split(/,/g)
+                      .map(line =>
+                        line.split(":").map(prop => prop.trim())
+                      )
                   )
-                : item.trim()
-            )
+                )
+              : item.trim()
+          )
         )
 
         for (const [color, settings] of params) {
-          colors.set(color, settings)
+          colors.set(color, { settings, opts })
         }
 
         const lightEls = []
@@ -46,23 +52,19 @@ module.exports = (opts = {}) => {
           Object.fromEntries(colors)
         )) {
           const colorName = `--color-${color}`
-          lightEls.push(`${colorName}:${values.light};`)
-          darkEls.push(`${colorName}:${values.dark};`)
+          lightEls.push(`${colorName}:${values.settings.light};`)
+          darkEls.push(`${colorName}:${values.settings.dark};`)
         }
 
-        try {
-          atRule.parent.insertBefore(
-            atRule,
-            `:root {${lightEls.join(
-              ""
-            )}}@media (prefers-color-scheme: dark) {:root {${darkEls.join(
-              ""
-            )}}}`
-          )
-          atRule.remove()
-        } catch (error) {
-          atRule.warn(result, error)
-        }
+        atRule.parent.insertBefore(
+          atRule,
+          `:root {${lightEls.join(
+            ""
+          )}}@media (prefers-color-scheme: dark) {:root {${darkEls.join(
+            ""
+          )}}}`
+        )
+        atRule.remove()
       }
     }
   }
